@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f8ff;
+    }
+    .calculator {
+      width: 300px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+    }
+    .display {
+      width: 100%;
+      height: 50px;
+      background: #000;
+      color: #fff;
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .buttons button {
+      height: 50px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      background: #e0e0e0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .buttons button:hover {
+      background: #c0c0c0;
+    }
+    .buttons .operation {
+      background: #ffa500;
+      color: white;
+    }
+    .buttons .operation:hover {
+      background: #cc8500;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">Let's calculate!</div>
+    <div class="buttons">
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operation" onclick="chooseOperation('/')">÷</button>
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operation" onclick="chooseOperation('*')">×</button>
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button class="operation" onclick="chooseOperation('-')">−</button>
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="calculate()">=</button>
+      <button class="operation" onclick="chooseOperation('+')">+</button>
+    </div>
+  </div>
+
+  <script>
+    let currentOperand = '';
+    let previousOperand = '';
+    let operation = null;
+
+    const display = document.getElementById('display');
+
+    function appendNumber(number) {
+      currentOperand += number;
+      updateDisplay(currentOperand);
+    }
+
+    function updateDisplay(text) {
+      display.innerText = text;
+    }
+
+    function clearDisplay() {
+      currentOperand = '';
+      previousOperand = '';
+      operation = null;
+      updateDisplay('Cleared! Ready to calculate.');
+    }
+
+    function chooseOperation(op) {
+      if (!currentOperand) return;
+      operation = op;
+      previousOperand = currentOperand;
+      currentOperand = '';
+    }
+
+    function calculate() {
+      const prev = parseInt(previousOperand);
+      const curr = parseInt(currentOperand);
+
+      // Special condition for 1 + 1
+      if (prev === 1 && curr === 1 && operation === '+') {
+        updateDisplay('Do the working out yourself you dumb fuck go touch grass');
+        currentOperand = '';
+        previousOperand = '';
+        operation = null;
+        return;
+      }
+
+      if (isNaN(prev) || isNaN(curr)) {
+        updateDisplay('Invalid input!');
+        return;
+      }
+
+      let response;
+      switch (operation) {
+        case '+':
+          response = `Wow, ${prev + curr}! That adds up nicely.`;
+          break;
+        case '-':
+          response = `Subtracting gives us... ${prev - curr}. Maths magic!`;
+          break;
+        case '*':
+          response = `Multiplication says ${prev * curr}! You're crushing it.`;
+          break;
+        case '/':
+          response = curr === 0 ? "Can't divide by zero, sorry!" : `Result: ${prev / curr}. Nice division!`;
+          break;
+        default:
+          response = 'Hmm, something went wrong!';
+      }
+
+      currentOperand = '';
+      previousOperand = '';
+      operation = null;
+      updateDisplay(response);
+    }
+  </script>
+</body>
+</html>
